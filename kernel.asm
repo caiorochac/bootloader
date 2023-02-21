@@ -224,15 +224,15 @@ selecionado:
     xor ax, ax  ;Zera os registradores
     mov dx, ax
 
+    mov ah, 0           ;modo video   
+    mov al, 13h           
+    int 10h
+
     mov si, op_menu ;carega valor de op_menu em al
     lodsb
 
     cmp al, 1
-    mov ah, 0           ;modo video   
-    mov al, 13h           
-    int 10h
-    call set_lateral ;prepara parte do cenario
-    je jogo
+    je set_lateral
 
     cmp al, 2
     je instrucoes
@@ -395,7 +395,7 @@ set_lateral:
     mov bx, 170
     call _prtimg
 
-    ret
+    jmp jogo
 
 check_obs:
     push ax   ;salva registradores
@@ -519,6 +519,8 @@ colisao:
 ;=======================================================================================================================
 jogo:
 
+
+    .loop_jogo:
     ;printa a pista
     mov si, pista
     mov dx, 0
@@ -605,7 +607,7 @@ jogo:
         call getchar
         call lerInputJogo
 
-    jmp jogo
+    jmp .loop_jogo
 ;=======================================================================================================================
 
 ;instrucoes
